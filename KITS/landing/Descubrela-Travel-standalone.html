@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descúbrela Travel — Tu primer viaje internacional</title>
+
+<meta name="ext-resource-dependency" content=".\assets\ISOLOGO.png" data-resource-id="logo" />
+<meta name="ext-resource-dependency" content="../../assets/amadeus-logo.jpg" data-resource-id="amadeus" />
+<meta name="ext-resource-dependency" content="../../assets/sabre-logo.jpg" data-resource-id="sabre" />
+<meta name="ext-resource-dependency" content="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80" data-resource-id="paris" />
+<meta name="ext-resource-dependency" content="https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=400&q=80" data-resource-id="nyc" />
+<meta name="ext-resource-dependency" content="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=400&q=80" data-resource-id="cancun" />
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="gsap.min.js"></script>
+<script src="ScrollTrigger.min.js"></script>
+
+<template id="__bundler_thumbnail" data-bg-color="#0A2473">
+  <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0A2473"/><stop offset="100%" stop-color="#164DF2"/></linearGradient></defs>
+    <rect width="700" height="440" fill="url(#bg)"/>
+    <ellipse cx="350" cy="175" rx="80" ry="55" fill="#F5A623"/>
+    <ellipse cx="295" cy="195" rx="55" ry="45" fill="#F5A623"/>
+    <ellipse cx="405" cy="195" rx="55" ry="45" fill="#F5A623"/>
+    <circle cx="350" cy="128" r="30" fill="#fff" opacity="0.9"/>
+    <ellipse cx="350" cy="185" rx="11" ry="30" fill="#fff"/>
+    <ellipse cx="326" cy="197" rx="20" ry="5" fill="#fff"/>
+    <ellipse cx="374" cy="197" rx="20" ry="5" fill="#fff"/>
+    <text x="350" y="290" text-anchor="middle" font-family="sans-serif" font-size="34" font-weight="900" fill="#ffffff">DescubreLA</text>
+    <text x="350" y="316" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#F5A623" letter-spacing="8">TRAVEL</text>
+    <text x="350" y="362" text-anchor="middle" font-family="sans-serif" font-size="13" fill="rgba(255,255,255,0.55)">Tu primer viaje internacional, sin miedos.</text>
+  </svg>
+</template>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Montserrat', sans-serif; color: #0D0D0D; background: #fff; -webkit-font-smoothing: antialiased; }
+
+  /* Globals */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #164DF2; margin-bottom: 12px; }
+  .eyebrow-white { color: #F5A623; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 9999px; font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; border: none; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); text-decoration: none; }
+  .btn-primary { background: #164DF2; color: #fff; }
+  .btn-primary:hover { background: #165FF2; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(22,77,242,0.35); }
+  .btn-wsp { background: #25D366; color: #fff; box-shadow: 0 4px 16px rgba(37,211,102,0.35); }
+  .btn-wsp:hover { background: #1eb85a; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.45); }
+  .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.6); }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+  .section { padding: 96px 0; }
+  .section-gray { background: #F5F6FA; }
+  .section-navy { background: #0A2473; }
+  .section-dark { background: #1A2D87; }
+  /* GSAP page transition overlay */
+  #page-transition {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column;
+    pointer-events: none;
+  }
+  .pt-panel {
+    flex: 1;
+    background: #0A2473;
+  }
+  .pt-logo {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .pt-logo img { width: 90px; height: 90px; border-radius: 14px; object-fit: cover; }
+  .pt-logo-name { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 22px; color: #fff; letter-spacing: -0.01em; }
+  .pt-logo-sub  { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; color: #F5A623; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  /* Split title chars */
+  .split-title .char {
+    display: inline-block;
+    transform: translateY(110%);
+    opacity: 0;
+    white-space: pre;
+  }
+  .split-title .word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    margin-right: 0.1em;
+  }
+
+  /* Override hero h1 animation — GSAP handles it */
+  .hero-h1 { opacity: 1 !important; animation: none !important; }
+  .hero-eyebrow { opacity: 1 !important; animation: none !important; }
+  .hero-sub { opacity: 1 !important; animation: none !important; }
+  .hero-ctas { opacity: 1 !important; animation: none !important; }
+  .hero-proof { opacity: 1 !important; animation: none !important; }
+
+  /* Scroll-triggered fade-in */
+  .fade-in { opacity: 0; transform: translateY(32px); transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* Hero entrance animations */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(36px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes polaroidFloat {
+    from { opacity: 0; transform: rotate(-2deg) translateY(48px); }
+    to   { opacity: 1; transform: rotate(-2deg) translateY(0); }
+  }
+  @keyframes polaroidFloatA {
+    from { opacity: 0; transform: rotate(3deg) translateY(48px); }
+    to   { opacity: 1; transform: rotate(3deg) translateY(0); }
+  }
+  @keyframes polaroidFloatB {
+    from { opacity: 0; transform: rotate(-3deg) translateY(48px); }
+    to   { opacity: 1; transform: rotate(-3deg) translateY(0); }
+  }
+  @keyframes waveReveal {
+    from { opacity: 0; transform: scaleX(0.8); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+
+  .hero-eyebrow  { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.2s forwards; }
+  .hero-h1       { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.45s forwards; }
+  .hero-sub      { opacity: 0; animation: heroFadeUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.65s forwards; }
+  .hero-ctas     { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 0.85s forwards; }
+  .hero-proof    { opacity: 0; animation: heroFadeUp 0.7s cubic-bezier(0.4,0,0.2,1) 1.05s forwards; }
+  @keyframes polaroidZoomMain {
+    from { opacity: 0; transform: rotate(-2deg) scale(1.8) translateY(20px); }
+    to   { opacity: 1; transform: rotate(-2deg) scale(1) translateY(0); }
+  }
+  @keyframes polaroidZoomA {
+    from { opacity: 0; transform: rotate(3deg) scale(2) translateY(30px); }
+    to   { opacity: 1; transform: rotate(3deg) scale(1) translateY(0); }
+  }
+  @keyframes polaroidZoomB {
+    from { opacity: 0; transform: rotate(-3deg) scale(2) translateY(30px); }
+    to   { opacity: 1; transform: rotate(-3deg) scale(1) translateY(0); }
+  }
+  @keyframes planeBurst {
+    0%   { transform: translate(0,0) rotate(var(--rot)) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(calc(var(--rot) + 180deg)) scale(0.3); opacity: 0; }
+  }
+
+  .hero-pol-main { opacity: 0; animation: polaroidZoomMain 1s cubic-bezier(0.34,1.56,0.64,1) 0.6s forwards; }
+  .hero-pol-a    { opacity: 0; animation: polaroidZoomA 1s cubic-bezier(0.34,1.56,0.64,1) 0.85s forwards; }
+  .hero-pol-b    { opacity: 0; animation: polaroidZoomB 1s cubic-bezier(0.34,1.56,0.64,1) 1.05s forwards; }
+  .hero-wave     { opacity: 0; animation: waveReveal 1s ease 1.1s forwards; }
+
+  /* WhatsApp floating button */
+  .wsp-float { position: fixed; bottom: 28px; right: 28px; z-index: 1000; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(37,211,102,0.45); cursor: pointer; transition: transform 0.2s; text-decoration: none; }
+  .wsp-float:hover { transform: scale(1.1); }
+  .wsp-float svg { width: 30px; height: 30px; fill: #fff; }
+  /* --- ESTILOS RESPONSIVE PARA EL FOOTER --- */
+/* 1. Diseño por defecto (PC - 4 columnas) */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+
+/* 2. Diseño para Celulares y Tablets (Pantallas menores a 768px) */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr; /* Cambia a 1 sola columna */
+    gap: 32px; /* Reduce un poco el espacio entre elementos */
+    text-align: center; /* Opcional: Centra el texto en móviles */
+  }
+  
+  /* Centrar la columna de la marca en móviles */
+  .footer-brand-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* --- ESTILOS RESPONSIVE PARA EL FOOTER --- */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+}
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<div id="page-transition">
+  <div class="pt-panel"></div>
+  <div class="pt-panel" style="background:#1A2D87;"></div>
+  <div class="pt-panel" style="background:#164DF2;"></div>
+</div>
+<div class="pt-logo" id="pt-logo">
+  <img src=".\assets\LOGO DESCUBRELA PNG.png" alt="Descúbrela Travel" id="pt-logo-img">
+</div>
+
+<script>
+window.__gsapReady = false;
+window.__runGSAP = function() {
+  if (window.__gsapReady) return;
+  window.__gsapReady = true;
+
+  const gsap = window.gsap;
+  if (!gsap) return;
+
+  // Register plugins
+  gsap.registerPlugin(window.ScrollTrigger, window.TextPlugin);
+
+  /* ─── 1. PAGE INTRO SEQUENCE ─── */
+  const intro = gsap.timeline();
+
+  intro
+    // Hold splash
+    .to({}, { duration: 0.5 })
+    // Logo pulse
+    .to('#pt-logo img', { scale: 1.1, duration: 0.35, ease: 'power2.out' })
+    .to('#pt-logo img', { scale: 1.0, duration: 0.2, ease: 'power2.in' })
+    // Logo fade out
+    .to('#pt-logo', { opacity: 0, y: -20, duration: 0.35, ease: 'power2.in' }, '+=0.1')
+    // Panels wipe up — middle first, then sides
+    .to('.pt-panel:nth-child(2)', { yPercent: -100, duration: 0.65, ease: 'power4.inOut' }, '-=0.1')
+    .to('.pt-panel:nth-child(1)', { yPercent: -100, duration: 0.65, ease: 'power4.inOut' }, '-=0.55')
+    .to('.pt-panel:nth-child(3)', { yPercent: -100, duration: 0.65, ease: 'power4.inOut' }, '-=0.65')
+    .set('#page-transition', { display: 'none' })
+    .set('#pt-logo', { display: 'none' })
+
+    /* ─── HERO ENTRANCE ─── */
+    // Eyebrow slides in from left
+    .fromTo('.hero-eyebrow',
+      { opacity: 0, x: -30 },
+      { opacity: 1, x: 0, duration: 0.55, ease: 'power3.out' }, '-=0.2')
+
+    // Title chars rise up — fast stagger
+    .to('.split-title .char', {
+      y: 0, opacity: 1,
+      duration: 0.55,
+      stagger: { amount: 0.6, from: 'start' },
+      ease: 'power3.out',
+    }, '-=0.2')
+
+    // Subtitle
+    .fromTo('.hero-sub',
+      { opacity: 0, y: 28 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.2')
+
+    // CTAs with slight scale pop
+    .fromTo('.hero-ctas',
+      { opacity: 0, y: 20, scale: 0.97 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.4)' }, '-=0.25')
+
+    // Social proof
+    .fromTo('.hero-proof',
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, '-=0.2')
+
+    // Polaroids zoom in — from large to final size
+    .fromTo('.hero-pol-main',
+      { opacity: 0, scale: 1.9, rotation: 0 },
+      { opacity: 1, scale: 1, rotation: -2, duration: 0.85, ease: 'back.out(1.2)' }, '-=0.5')
+    .fromTo('.hero-pol-a',
+      { opacity: 0, scale: 2.1, rotation: 0 },
+      { opacity: 1, scale: 1, rotation: 3, duration: 0.75, ease: 'back.out(1.3)' }, '-=0.55')
+    .fromTo('.hero-pol-b',
+      { opacity: 0, scale: 2.1, rotation: 0 },
+      { opacity: 1, scale: 1, rotation: -3, duration: 0.75, ease: 'back.out(1.3)' }, '-=0.6')
+
+    // Wave
+    .fromTo('.hero-wave',
+      { opacity: 0, scaleX: 0.85 },
+      { opacity: 1, scaleX: 1, duration: 0.6, ease: 'power2.out' }, '-=0.4');
+
+  /* ─── 2. SCROLL-TRIGGERED SECTIONS ─── */
+  // Wait a tick for React to render all sections
+  setTimeout(() => {
+    // Batch fade-in for all .fade-in elements
+    gsap.utils.toArray('.fade-in').forEach((el, i) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.7,
+          delay: (i % 4) * 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 88%',
+            toggleActions: 'play none none none',
+          }
+        }
+      );
+    });
+
+    // Parallax on polaroid images while scrolling
+    gsap.to('.hero-pol-main', {
+      y: -40,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.2,
+      }
+    });
+    gsap.to('.hero-pol-a, .hero-pol-b', {
+      y: -20,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.8,
+      }
+    });
+
+    // Cards in services — stagger on scroll
+    gsap.fromTo('[data-gsap="service-card"]',
+      { opacity: 0, y: 50, scale: 0.96 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#servicios',
+          start: 'top 75%',
+        }
+      }
+    );
+
+    // Process steps — slide in from bottom staggered
+    gsap.fromTo('[data-gsap="process-step"]',
+      { opacity: 0, y: 60 },
+      {
+        opacity: 1, y: 0,
+        duration: 0.65,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#proceso',
+          start: 'top 75%',
+        }
+      }
+    );
+
+  }, 800);
+};
+</script>
+
+<script type="text/babel">
+const Nav = () => {
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const links = ['Destinos','Servicios','Proceso','Contacto'];
+
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 900,
+      background: scrolled ? 'rgba(10,36,115,0.96)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(14px)' : 'none',
+      transition: 'background 0.35s, box-shadow 0.35s',
+      boxShadow: scrolled ? '0 2px 24px rgba(10,36,115,0.35)' : 'none',
+      padding: '0 24px',
+    }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 76 }}>
+
+        {/* Logo — square + wordmark */}
+        <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
+          <img
+            src={window.__resources.logo}
+            alt="Descúbrela Travel"
+            style={{
+              height: 44,
+              width: 44,
+              borderRadius: 8,
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+          <div style={{ lineHeight: 1 }}>
+            <div style={{ fontWeight: 900, fontSize: 16, color: '#fff', letterSpacing: '-0.01em' }}>DescubreLA</div>
+            <div style={{ fontWeight: 700, fontSize: 9, color: '#F5A623', letterSpacing: '0.18em', textTransform: 'uppercase', marginTop: 3 }}>TRAVEL</div>
+          </div>
+        </a>
+
+        {/* Desktop links */}
+        <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
+          {links.map(l => (
+            <a key={l} href={`#${l.toLowerCase()}`}
+              style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 600, textDecoration: 'none', letterSpacing: '0.02em', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.target.style.color = '#F5A623'}
+              onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.85)'}>
+              {l}
+            </a>
+          ))}
+          <a href="https://wa.me/51940071218" className="btn btn-wsp" style={{ padding: '10px 22px', fontSize: 13 }} target="_blank" rel="noopener noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z"/></svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+Object.assign(window, { Nav });
+
+const SplitTitle = ({ children, color }) => {
+  const words = children.split(' ').filter(w => w.length > 0);
+  return (
+    <span style={{ color: color || 'inherit' }}>
+      {words.map((word, wi) => (
+        <React.Fragment key={wi}>
+          <span className="word">
+            {word.split('').map((ch, ci) => (
+              <span key={ci} className="char">{ch}</span>
+            ))}
+          </span>
+          {wi < words.length - 1 ? ' ' : ''}
+        </React.Fragment>
+      ))}
+      {' '}
+    </span>
+  );
+};
+
+const Hero = () => {
+  const heroRef = React.useRef(null);
+  const orb1Ref = React.useRef(null);
+  const orb2Ref = React.useRef(null);
+  const orb3Ref = React.useRef(null);
+  const [planes, setPlanes] = React.useState([]);
+
+  // Trigger GSAP on mount — wait for DOM to be ready
+  React.useEffect(() => {
+    const run = () => {
+      if (!window.gsap || !window.__runGSAP) return;
+      // Wait until .char spans exist in the DOM
+      const waitForChars = (attempts = 0) => {
+        const chars = document.querySelectorAll('.split-title .char');
+        if (chars.length > 0 || attempts > 20) {
+          window.__runGSAP();
+        } else {
+          setTimeout(() => waitForChars(attempts + 1), 50);
+        }
+      };
+      waitForChars();
+    };
+    // Use requestAnimationFrame to ensure React has painted
+    requestAnimationFrame(() => requestAnimationFrame(run));
+  }, []);
+
+  // Mouse parallax
+  React.useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const onMove = (e) => {
+      const rect = hero.getBoundingClientRect();
+      const cx = (e.clientX - rect.left) / rect.width - 0.5;
+      const cy = (e.clientY - rect.top) / rect.height - 0.5;
+      if (orb1Ref.current) orb1Ref.current.style.transform = `translate(${cx * 40}px, ${cy * 30}px)`;
+      if (orb2Ref.current) orb2Ref.current.style.transform = `translate(${cx * -30}px, ${cy * -25}px)`;
+      if (orb3Ref.current) orb3Ref.current.style.transform = `translate(${cx * 20}px, ${cy * 40}px)`;
+    };
+    hero.addEventListener('mousemove', onMove);
+    return () => hero.removeEventListener('mousemove', onMove);
+  }, []);
+
+  // Plane burst on CTA click
+  const handleWspClick = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const newPlanes = Array.from({ length: 10 }, (_, i) => ({
+      id: Date.now() + i, angle: (i / 10) * 360, x: cx, y: cy,
+    }));
+    setPlanes(p => [...p, ...newPlanes]);
+    setTimeout(() => setPlanes([]), 900);
+  };
+
+  return (
+    <section ref={heroRef} id="hero" style={{
+      minHeight:'100vh', position:'relative', display:'flex', alignItems:'center',
+      background:'linear-gradient(155deg, #0A2473 0%, #1A2D87 45%, #164DF2 100%)',
+      overflow:'hidden',
+    }}>
+      {/* Parallax orbs */}
+      <div ref={orb1Ref} style={{ position:'absolute', top:'-10%', right:'-6%', width:680, height:680, borderRadius:'50%', background:'rgba(245,166,35,0.07)', pointerEvents:'none', transition:'transform 0.15s ease-out' }}></div>
+      <div ref={orb2Ref} style={{ position:'absolute', bottom:'-18%', left:'-8%', width:580, height:580, borderRadius:'50%', background:'rgba(22,77,242,0.18)', pointerEvents:'none', transition:'transform 0.18s ease-out' }}></div>
+      <div ref={orb3Ref} style={{ position:'absolute', top:'30%', left:'25%', width:300, height:300, borderRadius:'50%', background:'rgba(245,166,35,0.04)', pointerEvents:'none', transition:'transform 0.2s ease-out' }}></div>
+      <div style={{ position:'absolute', inset:0, backgroundImage:'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize:'40px 40px', pointerEvents:'none' }}></div>
+
+      {/* Plane burst particles */}
+      {planes.map(p => <PlaneBurst key={p.id} angle={p.angle} x={p.x} y={p.y} />)}
+
+      <div className="container" style={{ paddingTop:120, paddingBottom:100, position:'relative', zIndex:1 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'center' }}>
+
+          {/* Left copy */}
+          <div>
+            <div className="hero-eyebrow eyebrow eyebrow-white" style={{ marginBottom:16, opacity:0 }}>
+              Especialistas en paquetes de viajes y vuelos internacionales
+            </div>
+
+            <h1 className="hero-h1 split-title" style={{ fontSize:'clamp(34px,4.2vw,54px)', fontWeight:900, color:'#fff', lineHeight:1.2, letterSpacing:'-0.02em', marginBottom:24 }}>
+              <SplitTitle>Tu primer viaje internacional,</SplitTitle>
+              <SplitTitle color="#F5A623">sin estrés, sin miedos</SplitTitle>
+              <SplitTitle>y sin sorpresas.</SplitTitle>
+            </h1>
+
+            <p className="hero-sub" style={{ fontSize:17, fontWeight:500, color:'rgba(255,255,255,0.80)', lineHeight:1.75, marginBottom:40, maxWidth:480, opacity:0 }}>
+              Deja de pelear con páginas web complicadas. Te llevamos de la mano a EE.UU., Europa y Asia con un asesor personal 1 a 1 por WhatsApp.
+            </p>
+
+            <div className="hero-ctas" style={{ display:'flex', gap:14, flexWrap:'wrap', opacity:0 }}>
+              <a href="https://wa.me/51940071218?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20mi%20primer%20viaje"
+                className="btn btn-wsp" target="_blank" rel="noopener noreferrer" onClick={handleWspClick}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z"/></svg>
+                Hablar con mi asesor personal
+              </a>
+              <a href="#destinos" className="btn btn-outline">Ver destinos</a>
+            </div>
+
+            <div className="hero-proof" style={{ marginTop:48, display:'flex', alignItems:'center', gap:16, padding:'16px 20px', background:'rgba(255,255,255,0.07)', borderRadius:14, backdropFilter:'blur(8px)', border:'1px solid rgba(255,255,255,0.12)', width:'fit-content', opacity:0 }}>
+              <div style={{ display:'flex' }}>
+                {['#F5A623','#164DF2','#25D366','#E8EBF4'].map((c,i) => (
+                  <div key={i} style={{ width:32, height:32, borderRadius:'50%', background:c, border:'2px solid rgba(10,36,115,0.6)', marginLeft:i ? -8 : 0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:12 }}>
+                    {['✈','🌍','🗽','⭐'][i]}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ color:'#fff', fontWeight:700, fontSize:13 }}>Cientos de peruanos</div>
+                <div style={{ color:'rgba(255,255,255,0.55)', fontSize:11, fontWeight:500 }}>ya vivieron su primer viaje con nosotros</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: polaroids */}
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:24 }}>
+            <div className="hero-pol-main" style={{ background:'#fff', borderRadius:6, padding:'10px 10px 32px', boxShadow:'0 16px 48px rgba(10,36,115,0.32)', width:280 }}>
+              <img src={window.__resources.paris} alt="París"
+                style={{ width:'100%', height:160, objectFit:'cover', borderRadius:3, display:'block' }} />
+              <div style={{ fontSize:11, fontWeight:700, color:'#4A5278', marginTop:10, textAlign:'center' }}>París, Europa 🗺️</div>
+            </div>
+            <div style={{ display:'flex', gap:14 }}>
+              <div className="hero-pol-a" style={{ background:'#fff', borderRadius:6, padding:'8px 8px 28px', boxShadow:'0 12px 36px rgba(10,36,115,0.25)', width:134 }}>
+                <img src={window.__resources.nyc} alt="Nueva York"
+                  style={{ width:'100%', height:90, objectFit:'cover', borderRadius:2, display:'block' }} />
+                <div style={{ fontSize:10, fontWeight:700, color:'#4A5278', marginTop:8, textAlign:'center' }}>Nueva York 🗽</div>
+              </div>
+              <div className="hero-pol-b" style={{ background:'#fff', borderRadius:6, padding:'8px 8px 28px', boxShadow:'0 12px 36px rgba(10,36,115,0.25)', width:134 }}>
+                <img src={window.__resources.cancun} alt="Cancún"
+                  style={{ width:'100%', height:90, objectFit:'cover', borderRadius:2, display:'block' }} />
+                <div style={{ fontSize:10, fontWeight:700, color:'#4A5278', marginTop:8, textAlign:'center' }}>Cancún 🏖️</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <svg className="hero-wave" style={{ position:'absolute', bottom:0, left:0, right:0, width:'100%' }} viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#fff"/>
+      </svg>
+    </section>
+  );
+};
+
+/* Plane burst particle */
+const PlaneBurst = ({ angle, x, y }) => {
+  const rad = (angle * Math.PI) / 180;
+  const dist = 80 + Math.random() * 60;
+  const tx = Math.cos(rad) * dist;
+  const ty = Math.sin(rad) * dist;
+  const size = 12 + Math.random() * 8;
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24"
+      style={{
+        position:'fixed', left:x - size/2, top:y - size/2, zIndex:9999,
+        fill:'#fff', pointerEvents:'none',
+        animation:`planeBurst 0.8s cubic-bezier(0.4,0,0.2,1) forwards`,
+        '--tx':`${tx}px`, '--ty':`${ty}px`, '--rot':`${angle + 45}deg`,
+      }}>
+      <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+    </svg>
+  );
+};
+
+Object.assign(window, { Hero, SplitTitle, PlaneBurst });
+
+const Problem = () => {
+  const fears = [
+    { icon:'📋', text:'Equivocarte con la visa y perder dinero' },
+    { icon:'💸', text:'Cambiar dólares de más en el aeropuerto' },
+    { icon:'🧳', text:'Que la aerolínea te cobre extra por el equipaje' },
+    { icon:'📞', text:'Agencias que no responden cuando más las necesitas' },
+  ];
+
+  return (
+    <section style={{ padding:'96px 0', background:'#fff' }}>
+      <div className="container">
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
+          {/* Left: problem */}
+          <div className="fade-in">
+            <div className="eyebrow">El problema real</div>
+            <h2 style={{ fontSize:'clamp(28px,3.5vw,42px)', fontWeight:900, color:'#0D0D0D', lineHeight:1.15, letterSpacing:'-0.02em', marginBottom:20 }}>
+              ¿Sientes que organizar tu primera salida del Perú es abrumador?
+            </h2>
+            <p style={{ fontSize:17, fontWeight:400, color:'#4A5278', lineHeight:1.75, marginBottom:36 }}>
+              Has buscado en TikTok, leído blogs y preguntado a amigos... y sigues con miedo. No estás solo. Y <strong style={{color:'#164DF2'}}>no tiene que ser así.</strong>
+            </p>
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              {fears.map((f,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:14, padding:'14px 18px', background:'#F5F6FA', borderRadius:12, fontSize:14, fontWeight:600, color:'#0D0D0D' }}>
+                  <span style={{ fontSize:22 }}>{f.icon}</span>
+                  {f.text}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: comparison */}
+          <div className="fade-in">
+            <div style={{ background:'#F5F6FA', borderRadius:20, padding:32, boxShadow:'0 8px 32px rgba(10,36,115,0.10)' }}>
+              <div style={{ textAlign:'center', fontWeight:800, fontSize:13, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9BA3BF', marginBottom:24 }}>Agencia grande vs. Descúbrela</div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+                <CompareCol title="Agencia grande" color="#EF4444" dark={false} items={['Esperas días una respuesta','Asesores distintos cada vez','Precios "desde" engañosos','Logística complicada','Sin apoyo durante el viaje']} />
+                <CompareCol title="Descúbrela Travel" color="#164DF2" dark={true} items={['Respuesta el mismo día','Tu asesor de inicio a fin','Precio REAL, sin sorpresas','Todo gestionado por nosotros','Acompañamiento 24/7 vía WhatsApp']} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CompareCol = ({ title, color, dark, items }) => (
+  <div style={{ background: dark ? color : '#fff', borderRadius:14, padding:'20px 16px', boxShadow: dark ? `0 8px 32px rgba(22,77,242,0.25)` : '0 2px 8px rgba(10,36,115,0.08)' }}>
+    <div style={{ fontWeight:800, fontSize:13, color: dark ? '#fff' : '#4A5278', marginBottom:16, textAlign:'center' }}>{title}</div>
+    {items.map((item,i) => (
+      <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8, marginBottom:10, fontSize:12, fontWeight:600, color: dark ? 'rgba(255,255,255,0.9)' : '#4A5278', lineHeight:1.4 }}>
+        <span style={{ color: dark ? '#F5A623' : '#EF4444', fontWeight:900, marginTop:1, flexShrink:0 }}>{dark ? '✓' : '✗'}</span>
+        {item}
+      </div>
+    ))}
+  </div>
+);
+
+Object.assign(window, { Problem, CompareCol });
+
+const Services = () => {
+  const pillars = [
+    {
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 12l2 2 4-4"/><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14,2 14,8 20,8"/>
+        </svg>
+      ),
+      title:'Asesoría Migratoria y Legal',
+      desc:'Te guiamos paso a paso con requisitos de visas, ETIAS, vacunas y bolsa de viaje. Sin enredos legales.',
+      tag:'Visas · ETIAS · Seguros',
+    },
+    {
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
+        </svg>
+      ),
+      title:'Asesor 1 a 1 por WhatsApp',
+      desc:'La misma persona que te cotiza, te arma la maleta y te responde un domingo si tu vuelo se atrasa.',
+      tag:'Respuesta mismo día',
+    },
+    {
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      ),
+      title:'Transparencia, Cero Sorpresas',
+      desc:'Te decimos el costo REAL. Incluyendo propinas, traslados y seguros. Nada de precios "desde" engañosos.',
+      tag:'Precio total real',
+    },
+    {
+      icon: (
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+      ),
+      title:'Preparación Pre-Viaje',
+      desc:'Checklists de equipaje, consejos para evitar estafas en el aeropuerto y tips de tarjetas de crédito.',
+      tag:'Checklist · Tips · Guías',
+    },
+  ];
+
+  return (
+    <section id="servicios" style={{ padding:'96px 0', background:'#F5F6FA' }}>
+      <div className="container">
+        <div className="fade-in" style={{ textAlign:'center', marginBottom:64 }}>
+          <div className="eyebrow">Nuestros 4 pilares</div>
+          <h2 style={{ fontSize:'clamp(28px,3.5vw,42px)', fontWeight:900, color:'#0D0D0D', lineHeight:1.15, letterSpacing:'-0.02em', maxWidth:560, margin:'0 auto' }}>
+            Así es como eliminamos el miedo al primer viaje
+          </h2>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
+          {pillars.map((p,i) => (
+            <div key={i} className="fade-in" style={{ background:'#fff', borderRadius:16, padding:28, boxShadow:'0 4px 20px rgba(10,36,115,0.10)', transition:'transform 0.25s, box-shadow 0.25s', cursor:'default' }}
+              data-gsap="service-card"
+              onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-6px)';e.currentTarget.style.boxShadow='0 16px 48px rgba(10,36,115,0.18)'}}
+              onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 20px rgba(10,36,115,0.10)'}}>
+              <div style={{ color:'#164DF2', marginBottom:18 }}>{p.icon}</div>
+              <div style={{ fontSize:16, fontWeight:800, color:'#0D0D0D', marginBottom:10, lineHeight:1.3 }}>{p.title}</div>
+              <div style={{ fontSize:13, fontWeight:400, color:'#4A5278', lineHeight:1.7, marginBottom:16 }}>{p.desc}</div>
+              <div style={{ display:'inline-block', background:'#EEF2FF', color:'#164DF2', fontSize:10, fontWeight:700, padding:'5px 12px', borderRadius:9999, letterSpacing:'0.06em' }}>{p.tag}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+Object.assign(window, { Services });
+
+const Destinations = () => {
+  const [active, setActive] = React.useState(0);
+
+  const destinations = [
+    {
+      id: 'europa',
+      label: 'Europa',
+      icon: '🗺️',
+      tag: 'Schengen · ETIAS',
+      title: 'Europa sin complicaciones',
+      desc: 'Te guiamos con el nuevo permiso ETIAS, seguro de viaje obligatorio y sustento económico diario. Sin sorpresas en migración.',
+      img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80',
+      badge: 'Más solicitado',
+    },
+    {
+      id: 'eeuu',
+      label: 'Estados Unidos',
+      icon: '🗽',
+      tag: 'Visa B1/B2',
+      title: 'EE.UU. para peruanos',
+      desc: 'Paquetes individuales y familiares con asesoría completa en el proceso de visa. Tu asesor te acompaña desde la solicitud hasta el regreso.',
+      img: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80',
+      badge: null,
+    },
+    {
+      id: 'asia',
+      label: 'Asia',
+      icon: '🏯',
+      tag: 'Tours grupales',
+      title: 'Asia sin barreras',
+      desc: 'Exotismo sin barreras idiomáticas. Paquetes grupales guiados — transporte, alojamiento y guía incluidos. Tú solo disfruta.',
+      img: 'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80',
+      badge: 'Experiencia única',
+    },
+    {
+      id: 'caribe',
+      label: 'Caribe',
+      icon: '🏖️',
+      tag: 'Cancún · Punta Cana',
+      title: 'Caribe todo incluido',
+      desc: 'El escape perfecto. Full relax con sistema Todo Incluido, traslados prepagados y cero preocupaciones desde Lima.',
+      img: 'https://images.unsplash.com/photo-1552074284-5e88ef1aef18?w=800&q=80',
+      badge: null,
+    },
+    {
+      id: 'colegios',
+      label: 'Colegios',
+      icon: '🎓',
+      tag: 'Viajes de promoción',
+      title: 'Viajes de promoción seguros',
+      desc: 'Itinerarios controlados, comunicación constante con padres y acompañamiento 24/7. La experiencia más memorable del colegio.',
+      img: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
+      badge: null,
+    },
+  ];
+
+  const current = destinations[active];
+
+  return (
+    <section id="destinos" style={{ padding:'96px 0', background:'#fff' }}>
+      <div className="container">
+        <div className="fade-in" style={{ textAlign:'center', marginBottom:56 }}>
+          <div className="eyebrow">Hub de destinos</div>
+          <h2 style={{ fontSize:'clamp(28px,3.5vw,42px)', fontWeight:900, color:'#0D0D0D', lineHeight:1.15, letterSpacing:'-0.02em' }}>
+            ¿A dónde sueñas ir?
+          </h2>
+        </div>
+
+        {/* Tab selector */}
+        <div style={{ display:'flex', gap:8, marginBottom:40, overflowX:'auto', paddingBottom:4 }}>
+          {destinations.map((d,i) => (
+            <button key={d.id} onClick={() => setActive(i)} style={{
+              display:'flex', alignItems:'center', gap:8, padding:'10px 22px',
+              borderRadius:9999, border:'none', cursor:'pointer', fontFamily:'Montserrat, sans-serif',
+              fontSize:13, fontWeight:700, whiteSpace:'nowrap',
+              background: active===i ? '#164DF2' : '#F5F6FA',
+              color: active===i ? '#fff' : '#4A5278',
+              transition:'all 0.2s',
+              boxShadow: active===i ? '0 4px 16px rgba(22,77,242,0.3)' : 'none',
+            }}>
+              <span>{d.icon}</span> {d.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Content panel */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:40, alignItems:'center' }}>
+
+          {/* Destination card — real photo with overlay */}
+          <div style={{ borderRadius:20, overflow:'hidden', boxShadow:'0 16px 48px rgba(10,36,115,0.22)', position:'relative', minHeight:380 }}>
+            {/* Background photo */}
+            <img
+              key={current.id}
+              src={current.img}
+              alt={current.title}
+              style={{
+                position:'absolute', inset:0, width:'100%', height:'100%',
+                objectFit:'cover', display:'block',
+                transition:'opacity 0.4s ease, transform 0.6s ease',
+              }}
+            />
+            {/* Dark gradient overlay */}
+            <div style={{
+              position:'absolute', inset:0,
+              background:'linear-gradient(to top, rgba(5,15,50,0.90) 0%, rgba(5,15,50,0.45) 50%, rgba(5,15,50,0.15) 100%)',
+            }}></div>
+
+            {/* Content */}
+            <div style={{ position:'relative', zIndex:1, height:'100%', minHeight:380, display:'flex', flexDirection:'column', justifyContent:'flex-end', padding:36 }}>
+              {current.badge && (
+                <div style={{ display:'inline-block', background:'#F5A623', color:'#0D0D0D', fontSize:10, fontWeight:800, padding:'5px 14px', borderRadius:9999, marginBottom:16, width:'fit-content', letterSpacing:'0.06em', textTransform:'uppercase' }}>
+                  {current.badge}
+                </div>
+              )}
+              <div style={{ fontSize:10, fontWeight:700, color:'rgba(255,255,255,0.65)', letterSpacing:'0.12em', textTransform:'uppercase', marginBottom:10 }}>{current.tag}</div>
+              <h3 style={{ fontSize:30, fontWeight:900, color:'#fff', lineHeight:1.15, marginBottom:12 }}>{current.title}</h3>
+              <p style={{ fontSize:14, fontWeight:500, color:'rgba(255,255,255,0.82)', lineHeight:1.7, maxWidth:380 }}>{current.desc}</p>
+            </div>
+          </div>
+
+          {/* Video + CTA */}
+          <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
+            <div style={{ fontWeight:700, fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', color:'#164DF2' }}>Video educativo</div>
+            <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 32px rgba(10,36,115,0.15)', position:'relative', aspectRatio:'16/9', background:'linear-gradient(135deg,#0A2473,#1A2D87)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+              <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:12 }}>
+                <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(255,255,255,0.15)', border:'2px solid rgba(255,255,255,0.4)', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(4px)' }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, fontWeight:700, textAlign:'center', maxWidth:220, lineHeight:1.4 }}>
+                  "Lo que nadie te dice sobre viajar a Europa en 2026"
+                </div>
+              </div>
+            </div>
+            <a href="https://wa.me/51940071218" className="btn btn-primary" target="_blank" rel="noopener noreferrer"
+              style={{ width:'fit-content' }}>
+              Cotizar este destino
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+Object.assign(window, { Destinations });
+
+const Process = () => {
+  const steps = [
+    { num:'01', icon:'💬', title:'Escríbenos', desc:'Un mensaje a WhatsApp contándonos a dónde sueñas ir y cuándo quieres viajar.' },
+    { num:'02', icon:'🗺️', title:'Diseñamos tu ruta', desc:'Tu asesor personal te envía opciones transparentes con el costo total real. Sin "desde".' },
+    { num:'03', icon:'✅', title:'Preparamos todo', desc:'Gestionamos reservas, seguros de viaje y te damos la lista de empaque exacta.' },
+    { num:'04', icon:'✈️', title:'Viajas seguro', desc:'Te acompañamos por chat durante todo tu viaje hasta que regreses a casa en Lima.' },
+  ];
+
+  return (
+    <section id="proceso" style={{ padding:'96px 0', background:'#0A2473', position:'relative', overflow:'hidden' }}>
+      {/* Decorative */}
+      <div style={{ position:'absolute', top:'-20%', right:'-10%', width:500, height:500, borderRadius:'50%', background:'rgba(22,77,242,0.2)', pointerEvents:'none' }}></div>
+
+      <div className="container" style={{ position:'relative', zIndex:1 }}>
+        <div className="fade-in" style={{ textAlign:'center', marginBottom:64 }}>
+          <div className="eyebrow eyebrow-white">Proceso simple</div>
+          <h2 style={{ fontSize:'clamp(28px,3.5vw,42px)', fontWeight:900, color:'#fff', lineHeight:1.15, letterSpacing:'-0.02em' }}>
+            Cómo empezar tu aventura
+          </h2>
+          <p style={{ fontSize:16, fontWeight:500, color:'rgba(255,255,255,0.65)', marginTop:14, maxWidth:480, margin:'14px auto 0' }}>
+            Solo 4 pasos y tu asesor personal hace el resto.
+          </p>
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
+          {steps.map((s,i) => (
+            <div key={i} className="fade-in" style={{ position:'relative' }}>
+              {/* Connector line */}
+              {i < steps.length-1 && (
+                <div style={{ position:'absolute', top:28, left:'calc(50% + 28px)', right:'-50%', height:2, background:'rgba(255,255,255,0.15)', zIndex:0 }}></div>
+              )}
+              <div data-gsap="process-step" style={{ background:'rgba(255,255,255,0.07)', borderRadius:16, padding:'28px 22px', border:'1px solid rgba(255,255,255,0.10)', backdropFilter:'blur(8px)', position:'relative', zIndex:1, textAlign:'center',
+                transition:'background 0.25s, transform 0.25s', cursor:'default' }}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.12)';e.currentTarget.style.transform='translateY(-4px)'}}
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.07)';e.currentTarget.style.transform='translateY(0)'}}>
+                {/* Step number */}
+                <div style={{ width:52, height:52, borderRadius:'50%', background:'#164DF2', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', boxShadow:'0 8px 24px rgba(22,77,242,0.4)', fontSize:20 }}>
+                  {s.icon}
+                </div>
+                <div style={{ fontSize:10, fontWeight:800, color:'rgba(245,166,35,0.8)', letterSpacing:'0.12em', marginBottom:8 }}>{s.num}</div>
+                <div style={{ fontSize:16, fontWeight:800, color:'#fff', marginBottom:10, lineHeight:1.3 }}>{s.title}</div>
+                <div style={{ fontSize:13, fontWeight:400, color:'rgba(255,255,255,0.65)', lineHeight:1.7 }}>{s.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA bottom */}
+        <div className="fade-in" style={{ textAlign:'center', marginTop:60 }}>
+          <a href="https://wa.me/51940071218?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20mi%20primer%20viaje" className="btn btn-wsp" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize:16, padding:'16px 40px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z"/></svg>
+            Comenzar mi primer viaje ahora
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+Object.assign(window, { Process });
+
+const Footer = () => {
+  const socials = [
+    { label:'Instagram', color:'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)',
+      icon:<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5" fill="#fff" stroke="none"/></svg>,
+      href:'https://instagram.com' },
+    { label:'Facebook', color:'#1877F2',
+      icon:<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>,
+      href:'https://facebook.com' },
+    { label:'TikTok', color:'#010101',
+      icon:<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.52V6.76a4.85 4.85 0 01-1.02-.07z"/></svg>,
+      href:'https://tiktok.com' },
+    { label:'Gmail', color:'#EA4335',
+      icon:<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>,
+      href:'mailto:contacto@descubrelatravel.com' },
+  ];
+
+  const links = [
+    { title:'Destinos', items:['Europa','Estados Unidos','Asia','Caribe','Viajes de Colegios'] },
+    { title:'Servicios', items:['Asesoría Migratoria','Paquetes Individuales','Tours Grupales','Seguros de Viaje'] },
+    { title:'Contacto', items:['WhatsApp: +51 940 071 218','Lima, Perú'] },
+  ];
+
+  return (
+    <footer id="contacto" style={{ background:'#0A2473', color:'#fff' }}>
+      {/* Main footer */}
+      <div className="container" style={{ padding:'72px 24px 48px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1.4fr 1fr 1fr 1fr', gap:48, marginBottom:56 }}>
+
+          {/* Brand col */}
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:20 }}>
+              <img src={window.__resources.logo} alt="Descúbrela Travel"
+                style={{ width:48, height:48, borderRadius:8, objectFit:'cover', display:'block', flexShrink:0 }} />
+              <div style={{ lineHeight:1 }}>
+                <div style={{ fontWeight:900, fontSize:18, letterSpacing:'-0.01em', color:'#fff' }}>DescubreLA</div>
+                <div style={{ fontWeight:700, fontSize:9, color:'#F5A623', letterSpacing:'0.18em', textTransform:'uppercase', marginTop:4 }}>TRAVEL</div>
+              </div>
+            </div>
+            <p style={{ fontSize:13, fontWeight:400, color:'rgba(255,255,255,0.60)', lineHeight:1.75, marginBottom:24, maxWidth:240 }}>
+              Especialistas en acompañar a peruanos en su primer viaje internacional. Tu asesor personal 1 a 1 por WhatsApp.
+            </p>
+            {/* Social icons */}
+            <div style={{ display:'flex', gap:10 }}>
+              {socials.map(s => (
+                <a key={s.label} href={s.href} aria-label={s.label} target="_blank" rel="noopener noreferrer"
+                  style={{ width:36, height:36, borderRadius:'50%', background:s.color, display:'flex', alignItems:'center', justifyContent:'center', transition:'transform 0.2s, opacity 0.2s', textDecoration:'none' }}
+                  onMouseEnter={e=>{e.currentTarget.style.transform='scale(1.12)';e.currentTarget.style.opacity='0.85'}}
+                  onMouseLeave={e=>{e.currentTarget.style.transform='scale(1)';e.currentTarget.style.opacity='1'}}>
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+            {/* WhatsApp */}
+            <a href="https://wa.me/51940071218" target="_blank" rel="noopener noreferrer"
+              style={{ display:'inline-flex', alignItems:'center', gap:8, marginTop:20, background:'#25D366', color:'#fff', padding:'10px 20px', borderRadius:9999, fontSize:13, fontWeight:700, textDecoration:'none', transition:'opacity 0.2s' }}
+              onMouseEnter={e=>e.currentTarget.style.opacity='0.88'} onMouseLeave={e=>e.currentTarget.style.opacity='1'}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z"/></svg>
+              +51 940 071 218
+            </a>
+          </div>
+
+          {/* Link columns */}
+          {links.map(col => (
+            <div key={col.title}>
+              <div style={{ fontSize:11, fontWeight:800, letterSpacing:'0.12em', textTransform:'uppercase', color:'#F5A623', marginBottom:18 }}>{col.title}</div>
+              <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+                {col.items.map(item => (
+                  <div key={item} style={{ fontSize:13, fontWeight:500, color:'rgba(255,255,255,0.65)', cursor:'pointer', transition:'color 0.2s' }}
+                    onMouseEnter={e=>e.target.style.color='#fff'} onMouseLeave={e=>e.target.style.color='rgba(255,255,255,0.65)'}>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div style={{ height:1, background:'rgba(255,255,255,0.10)', marginBottom:32 }}></div>
+
+        {/* Partner logos + copyright */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:20 }}>
+          <div style={{ fontSize:12, fontWeight:500, color:'rgba(255,255,255,0.35)' }}>
+            © 2025 Descúbrela Travel. Todos los derechos reservados.
+          </div>
+          {/* Partner logos — white filter */}
+          <div style={{ display:'flex', alignItems:'center', gap:24 }}>
+            <div style={{ fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.3)', letterSpacing:'0.08em', textTransform:'uppercase' }}>Partners tecnológicos</div>
+            <img src={window.__resources.amadeus} alt="Amadeus"
+              style={{ height:22, objectFit:'contain', filter:'brightness(0) invert(1)', opacity:0.55, transition:'opacity 0.2s', cursor:'default' }}
+              onMouseEnter={e=>e.target.style.opacity='0.9'} onMouseLeave={e=>e.target.style.opacity='0.55'} />
+            <img src={window.__resources.sabre} alt="Sabre"
+              style={{ height:22, objectFit:'contain', filter:'brightness(0) invert(1)', opacity:0.55, transition:'opacity 0.2s', cursor:'default' }}
+              onMouseEnter={e=>e.target.style.opacity='0.9'} onMouseLeave={e=>e.target.style.opacity='0.55'} />
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+Object.assign(window, { Footer });
+
+
+const WspFloat = () => (
+  <a href="https://wa.me/51940071218?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20mi%20primer%20viaje" className="wsp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z"/></svg>
+  </a>
+);
+
+const App = () => {
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), Number(e.target.dataset.delay || 0));
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach((el, i) => {
+      el.dataset.delay = String(i % 4 * 100);
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Nav />
+      <Hero />
+      <Problem />
+      <Services />
+      <Destinations />
+      <Process />
+      <Footer />
+      <WspFloat />
+    </React.Fragment>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
