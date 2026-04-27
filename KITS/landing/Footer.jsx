@@ -83,7 +83,7 @@ const Footer = () => {
         <div style={{ height:1, background:'rgba(255,255,255,0.10)', marginBottom:32 }}></div>
 
         {/* Partner logos + copyright */}
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:20 }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:20 }} className="footer-bottom">
           <div style={{ fontSize:12, fontWeight:500, color:'rgba(255,255,255,0.35)' }}>
             © 2025 Descúbrela Travel. Todos los derechos reservados.
           </div>
@@ -102,5 +102,16 @@ const Footer = () => {
     </footer>
   );
 };
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 768px) {
+      .footer-bottom { flex-direction: column; justify-content: center !important; align-items: center !important; text-align: center; }
+      .footer-bottom > div:last-child { flex-direction: column; }
+    }
+  `;
+  if (document.head) document.head.appendChild(style);
+}
 
 Object.assign(window, { Footer });
