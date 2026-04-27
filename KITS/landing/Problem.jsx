@@ -9,7 +9,7 @@ const Problem = () => {
   return (
     <section style={{ padding:'96px 0', background:'#fff' }}>
       <div className="container">
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }} className="problem-grid">
           {/* Left: problem */}
           <div className="fade-in">
             <div className="eyebrow">El problema real</div>
@@ -33,7 +33,7 @@ const Problem = () => {
           <div className="fade-in">
             <div style={{ background:'#F5F6FA', borderRadius:20, padding:32, boxShadow:'0 8px 32px rgba(10,36,115,0.10)' }}>
               <div style={{ textAlign:'center', fontWeight:800, fontSize:13, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9BA3BF', marginBottom:24 }}>Agencia grande vs. Descúbrela</div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }} className="compare-grid">
                 <CompareCol title="Agencia grande" color="#EF4444" dark={false} items={['Esperas días una respuesta','Asesores distintos cada vez','Precios "desde" engañosos','Logística complicada','Sin apoyo durante el viaje']} />
                 <CompareCol title="Descúbrela Travel" color="#164DF2" dark={true} items={['Respuesta el mismo día','Tu asesor de inicio a fin','Precio REAL, sin sorpresas','Todo gestionado por nosotros','Acompañamiento 24/7 vía WhatsApp']} />
               </div>
@@ -56,5 +56,16 @@ const CompareCol = ({ title, color, dark, items }) => (
     ))}
   </div>
 );
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 768px) {
+      .problem-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+      .compare-grid { grid-template-columns: 1fr !important; }
+    }
+  `;
+  if (document.head) document.head.appendChild(style);
+}
 
 Object.assign(window, { Problem, CompareCol });

@@ -91,7 +91,7 @@ const Destinations = () => {
         </div>
 
         {/* Content panel */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:40, alignItems:'center' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:40, alignItems:'center' }} className="dest-grid">
 
           {/* Destination card — real photo with overlay */}
           <div style={{ borderRadius:20, overflow:'hidden', boxShadow:'0 16px 48px rgba(10,36,115,0.22)', position:'relative', minHeight:380 }}>
@@ -148,5 +148,16 @@ const Destinations = () => {
     </section>
   );
 };
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 768px) {
+      .dest-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+      .dest-grid > div:last-child { order: -1; }
+    }
+  `;
+  if (document.head) document.head.appendChild(style);
+}
 
 Object.assign(window, { Destinations });

@@ -86,8 +86,8 @@ const Hero = () => {
       {/* Plane burst particles */}
       {planes.map(p => <PlaneBurst key={p.id} angle={p.angle} x={p.x} y={p.y} />)}
 
-      <div className="container" style={{ paddingTop:120, paddingBottom:100, position:'relative', zIndex:1 }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'center' }}>
+      <div className="container" style={{ paddingTop:'clamp(60px, 15vw, 120px)', paddingBottom:'clamp(60px, 15vw, 100px)', position:'relative', zIndex:1 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'clamp(32px, 6vw, 72px)', alignItems:'center' }} className="hero-grid">
 
           {/* Left copy */}
           <div>
@@ -114,7 +114,7 @@ const Hero = () => {
               <a href="#destinos" className="btn btn-outline">Ver destinos</a>
             </div>
 
-            <div className="hero-proof" style={{ marginTop:48, display:'flex', alignItems:'center', gap:16, padding:'16px 20px', background:'rgba(255,255,255,0.07)', borderRadius:14, backdropFilter:'blur(8px)', border:'1px solid rgba(255,255,255,0.12)', width:'fit-content', opacity:0 }}>
+            <div className="hero-proof" style={{ marginTop:'clamp(24px, 4vw, 48px)', display:'flex', alignItems:'center', gap:16, padding:'16px 20px', background:'rgba(255,255,255,0.07)', borderRadius:14, backdropFilter:'blur(8px)', border:'1px solid rgba(255,255,255,0.12)', width:'fit-content', opacity:0, flexWrap:'wrap' }} className="hero-proof-mobile">
               <div style={{ display:'flex' }}>
                 {['#F5A623','#164DF2','#25D366','#E8EBF4'].map((c,i) => (
                   <div key={i} style={{ width:32, height:32, borderRadius:'50%', background:c, border:'2px solid rgba(10,36,115,0.6)', marginLeft:i ? -8 : 0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:12 }}>
@@ -178,5 +178,25 @@ const PlaneBurst = ({ angle, x, y }) => {
     </svg>
   );
 };
+
+// Responsive styles injected into head
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr !important; }
+      .hero-ctas { flex-direction: column !important; }
+      .hero-ctas .btn { width: 100%; }
+      .hero-proof-mobile { width: 100%; justify-content: center; }
+      .hero-proof-mobile > div:last-child { text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-grid > div:last-child { display: flex; justify-content: center; }
+      .hero-pol-main { width: 220px; }
+      .hero-pol-a, .hero-pol-b { width: 100px; }
+    }
+  `;
+  if (document.head) document.head.appendChild(style);
+}
 
 Object.assign(window, { Hero, SplitTitle, PlaneBurst });

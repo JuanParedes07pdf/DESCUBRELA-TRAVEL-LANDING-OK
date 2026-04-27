@@ -22,7 +22,7 @@ const Process = () => {
           </p>
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }} className="process-grid">
           {steps.map((s,i) => (
             <div key={i} className="fade-in" style={{ position:'relative' }}>
               {/* Connector line */}
@@ -57,5 +57,19 @@ const Process = () => {
     </section>
   );
 };
+
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 1024px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 768px) {
+      .process-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+      .process-grid > div > div:first-child { display: none; }
+    }
+  `;
+  if (document.head) document.head.appendChild(style);
+}
 
 Object.assign(window, { Process });
