@@ -22,12 +22,12 @@ const Process = () => {
           </p>
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
+        <div className="grid-4">
           {steps.map((s,i) => (
             <div key={i} className="fade-in" style={{ position:'relative' }}>
               {/* Connector line */}
               {i < steps.length-1 && (
-                <div style={{ position:'absolute', top:28, left:'calc(50% + 28px)', right:'-50%', height:2, background:'rgba(255,255,255,0.15)', zIndex:0 }}></div>
+                <div className="process-line" style={{ position:'absolute', top:28, left:'calc(50% + 28px)', right:'-50%', height:2, background:'rgba(255,255,255,0.15)', zIndex:0 }}></div>
               )}
               <div data-gsap="process-step" style={{ background:'rgba(255,255,255,0.07)', borderRadius:16, padding:'28px 22px', border:'1px solid rgba(255,255,255,0.10)', backdropFilter:'blur(8px)', position:'relative', zIndex:1, textAlign:'center',
                 transition:'background 0.25s, transform 0.25s', cursor:'default' }}

@@ -9,9 +9,9 @@ const Problem = () => {
   return (
     <section style={{ padding:'96px 0', background:'#fff' }}>
       <div className="container">
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }}>
+        <div className="grid-2" style={{ alignItems:'center' }}>
           {/* Left: problem */}
-          <div className="fade-in">
+          <div className="fade-in problem-text">
             <div className="eyebrow">El problema real</div>
             <h2 style={{ fontSize:'clamp(28px,3.5vw,42px)', fontWeight:900, color:'#0D0D0D', lineHeight:1.15, letterSpacing:'-0.02em', marginBottom:20 }}>
               ¿Sientes que organizar tu primera salida del Perú es abrumador?
@@ -33,7 +33,7 @@ const Problem = () => {
           <div className="fade-in">
             <div style={{ background:'#F5F6FA', borderRadius:20, padding:32, boxShadow:'0 8px 32px rgba(10,36,115,0.10)' }}>
               <div style={{ textAlign:'center', fontWeight:800, fontSize:13, letterSpacing:'0.1em', textTransform:'uppercase', color:'#9BA3BF', marginBottom:24 }}>Agencia grande vs. Descúbrela</div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+              <div className="problem-compare" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
                 <CompareCol title="Agencia grande" color="#EF4444" dark={false} items={['Esperas días una respuesta','Asesores distintos cada vez','Precios "desde" engañosos','Logística complicada','Sin apoyo durante el viaje']} />
                 <CompareCol title="Descúbrela Travel" color="#164DF2" dark={true} items={['Respuesta el mismo día','Tu asesor de inicio a fin','Precio REAL, sin sorpresas','Todo gestionado por nosotros','Acompañamiento 24/7 vía WhatsApp']} />
               </div>

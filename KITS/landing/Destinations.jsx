@@ -74,7 +74,7 @@ const Destinations = () => {
         </div>
 
         {/* Tab selector */}
-        <div style={{ display:'flex', gap:8, marginBottom:40, overflowX:'auto', paddingBottom:4 }}>
+        <div className="dest-tabs" style={{ display:'flex', gap:8, marginBottom:40, overflowX:'auto', paddingBottom:4 }}>
           {destinations.map((d,i) => (
             <button key={d.id} onClick={() => setActive(i)} style={{
               display:'flex', alignItems:'center', gap:8, padding:'10px 22px',
@@ -91,7 +91,7 @@ const Destinations = () => {
         </div>
 
         {/* Content panel */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:40, alignItems:'center' }}>
+        <div className="grid-2" style={{ alignItems:'center' }}>
 
           {/* Destination card — real photo with overlay */}
           <div style={{ borderRadius:20, overflow:'hidden', boxShadow:'0 16px 48px rgba(10,36,115,0.22)', position:'relative', minHeight:380 }}>

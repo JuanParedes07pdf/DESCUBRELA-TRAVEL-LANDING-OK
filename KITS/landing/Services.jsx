@@ -51,7 +51,7 @@ const Services = () => {
             Así es como eliminamos el miedo al primer viaje
           </h2>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
+        <div className="grid-4">
           {pillars.map((p,i) => (
             <div key={i} className="fade-in" style={{ background:'#fff', borderRadius:16, padding:28, boxShadow:'0 4px 20px rgba(10,36,115,0.10)', transition:'transform 0.25s, box-shadow 0.25s', cursor:'default' }}
               data-gsap="service-card"
