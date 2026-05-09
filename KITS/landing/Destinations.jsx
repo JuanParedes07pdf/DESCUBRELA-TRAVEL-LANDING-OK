@@ -1,12 +1,30 @@
 /*Declarar variable para fotos de destinos
-import fotoeuropa from './assets/europa.jpg';
-import fotoeeuu from './assets/new_york.jpg';
-import fotoasia from './assets/japon.jpg';
-import fotocaribe from './assets/caribe.jpg';
-import fotocolegio from './assets/escolares.jpg';
+import fotoeuropa from '/KITS/landing/assets/europa.jpg';
+import fotoeeuu from '/KITS/landing/assets/new_york.jpg';
+import fotoasia from '/KITS/landing/assets/japon.jpg';
+import fotocaribe from '/KITS/landing/assets/caribe.jpg';
+import fotocolegio from '/KITS/landing/assets/escolares.jpg';
 */
 const Destinations = () => {
   const [active, setActive] = React.useState(0);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isMuted, setIsMuted] = React.useState(true);
+  const videoRef = React.useRef(null);
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { v.play(); setIsPlaying(true); }
+    else { v.pause(); setIsPlaying(false); }
+  };
+
+  const toggleMute = (e) => {
+    e.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = !v.muted;
+    setIsMuted(v.muted);
+  };
 
   const destinations = [
     {
@@ -16,7 +34,7 @@ const Destinations = () => {
       tag: 'Schengen · ETIAS',
       title: 'Europa sin complicaciones',
       desc: 'Te guiamos con el nuevo permiso ETIAS, seguro de viaje obligatorio y sustento económico diario. Sin sorpresas en migración.',
-      img: './assets/europa.jpg',
+      img: '/KITS/landing/assets/europa.jpg',
       badge: 'Más solicitado',
     },
     {
@@ -26,7 +44,7 @@ const Destinations = () => {
       tag: 'Visa B1/B2',
       title: 'EE.UU. para peruanos',
       desc: 'Paquetes individuales y familiares con asesoría completa en el proceso de visa. Tu asesor te acompaña desde la solicitud hasta el regreso.',
-      img: './assets/new_york.jpg',
+      img: '/KITS/landing/assets/new_york.jpg',
       badge: null,
     },
     {
@@ -36,7 +54,7 @@ const Destinations = () => {
       tag: 'Tours grupales',
       title: 'Asia sin barreras',
       desc: 'Exotismo sin barreras idiomáticas. Paquetes grupales guiados — transporte, alojamiento y guía incluidos. Tú solo disfruta.',
-      img: './assets/japon.jpg',
+      img: '/KITS/landing/assets/japon.jpg',
       badge: 'Experiencia única',
     },
     {
@@ -46,7 +64,7 @@ const Destinations = () => {
       tag: 'Cancún · Punta Cana',
       title: 'Caribe todo incluido',
       desc: 'El escape perfecto. Full relax con sistema Todo Incluido, traslados prepagados y cero preocupaciones desde Lima.',
-      img: './assets/caribe.jpg',
+      img: '/KITS/landing/assets/caribe.jpg',
       badge: null,
     },
     {
@@ -56,7 +74,7 @@ const Destinations = () => {
       tag: 'Viajes de promoción',
       title: 'Viajes de promoción seguros',
       desc: 'Itinerarios controlados, comunicación constante con padres y acompañamiento 24/7. La experiencia más memorable del colegio.',
-      img: './assets/escolares.jpg',
+      img: '/KITS/landing/assets/escolares.jpg',
       badge: null,
     },
   ];
@@ -125,20 +143,88 @@ const Destinations = () => {
             </div>
           </div>
 
-          {/* Video + CTA */}
-          <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
-            <div style={{ fontWeight:700, fontSize:11, letterSpacing:'0.12em', textTransform:'uppercase', color:'#164DF2' }}>Video educativo</div>
-            <div style={{ borderRadius:14, overflow:'hidden', boxShadow:'0 8px 32px rgba(10,36,115,0.15)', position:'relative', aspectRatio:'16/9', background:'linear-gradient(135deg,#0A2473,#1A2D87)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
-              <div style={{ position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:12 }}>
-                <div style={{ width:56, height:56, borderRadius:'50%', background:'rgba(255,255,255,0.15)', border:'2px solid rgba(255,255,255,0.4)', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(4px)' }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {/* Video educativo — formato vertical 9:16 (Reel-style) */}
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:22 }}>
+            <div style={{ alignSelf:'flex-start', display:'flex', alignItems:'center', gap:8 }}>
+              <span style={{ display:'inline-flex', width:8, height:8, borderRadius:'50%', background:'#F5A623', boxShadow:'0 0 0 4px rgba(245,166,35,0.18)' }}></span>
+              <span style={{ fontWeight:800, fontSize:11, letterSpacing:'0.14em', textTransform:'uppercase', color:'#164DF2' }}>Video educativo</span>
+            </div>
+
+            {/* Phone-frame video container */}
+            <div onClick={togglePlay}
+              style={{
+                position:'relative',
+                width:'100%', maxWidth:300, aspectRatio:'9 / 16',
+                borderRadius:32,
+                background:'linear-gradient(155deg, #0A2473 0%, #1A2D87 60%, #164DF2 100%)',
+                padding:8,
+                boxShadow:'0 24px 60px rgba(10,36,115,0.32), 0 0 0 1px rgba(255,255,255,0.06) inset',
+                cursor:'pointer',
+                transition:'transform 0.3s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+
+              <div style={{ position:'relative', width:'100%', height:'100%', borderRadius:24, overflow:'hidden', background:'#000' }}>
+                <video
+                  ref={videoRef}
+                  src="/KITS/landing/assets/video-educativo.mp4"
+                  poster="/KITS/landing/assets/video-educativo-poster.jpg"
+                  playsInline
+                  muted={isMuted}
+                  loop
+                  preload="metadata"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }}
+                />
+
+                {/* Top gradient + label */}
+                <div style={{ position:'absolute', top:0, left:0, right:0, padding:'14px 16px 28px', background:'linear-gradient(to bottom, rgba(0,0,0,0.55), transparent)', display:'flex', alignItems:'center', gap:8, pointerEvents:'none' }}>
+                  <div style={{ width:6, height:6, borderRadius:'50%', background:'#F5A623' }}></div>
+                  <span style={{ color:'#fff', fontSize:11, fontWeight:700, letterSpacing:'0.05em' }}>@descubrelatravel</span>
                 </div>
-                <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, fontWeight:700, textAlign:'center', maxWidth:220, lineHeight:1.4 }}>
-                  "Lo que nadie te dice sobre viajar a Europa en 2026"
+
+                {/* Big play overlay (hides while playing) */}
+                <div style={{
+                  position:'absolute', inset:0,
+                  display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', gap:14,
+                  background: isPlaying ? 'transparent' : 'linear-gradient(to top, rgba(5,15,50,0.55), rgba(5,15,50,0.15))',
+                  opacity: isPlaying ? 0 : 1,
+                  transition:'opacity 0.35s ease',
+                  pointerEvents: isPlaying ? 'none' : 'auto',
+                }}>
+                  <div style={{ width:68, height:68, borderRadius:'50%', background:'rgba(255,255,255,0.18)', border:'2px solid rgba(255,255,255,0.6)', display:'flex', alignItems:'center', justifyContent:'center', backdropFilter:'blur(8px)', boxShadow:'0 8px 32px rgba(0,0,0,0.35)' }}>
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" style={{ marginLeft:3 }}><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </div>
+                  <div style={{ color:'#fff', fontSize:13, fontWeight:700, textAlign:'center', maxWidth:220, lineHeight:1.4, padding:'0 16px', textShadow:'0 2px 12px rgba(0,0,0,0.45)' }}>
+                    "Lo que nadie te dice sobre viajar a Europa en 2026"
+                  </div>
                 </div>
+
+                {/* Mute toggle — visible while playing */}
+                <button
+                  onClick={toggleMute}
+                  aria-label={isMuted ? 'Activar audio' : 'Silenciar'}
+                  style={{
+                    position:'absolute', bottom:14, right:14,
+                    width:38, height:38, borderRadius:'50%',
+                    border:'1px solid rgba(255,255,255,0.4)',
+                    background:'rgba(0,0,0,0.45)', backdropFilter:'blur(8px)',
+                    cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center',
+                    opacity: isPlaying ? 1 : 0, transition:'opacity 0.3s',
+                    pointerEvents: isPlaying ? 'auto' : 'none',
+                  }}>
+                  {isMuted ? (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+                  )}
+                </button>
               </div>
             </div>
-            <a href="https://wa.me/51940071218" className="btn btn-primary" target="_blank" rel="noopener noreferrer"
+
+            <a href={`https://wa.me/51940071218?text=Hola%2C%20quiero%20cotizar%20${encodeURIComponent(current.label)}`} className="btn btn-primary" target="_blank" rel="noopener noreferrer"
               style={{ width:'fit-content' }}>
               Cotizar este destino
             </a>

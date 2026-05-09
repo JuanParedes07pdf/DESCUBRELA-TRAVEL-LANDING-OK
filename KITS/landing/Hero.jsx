@@ -105,26 +105,42 @@ const Hero = () => {
               Deja de pelear con páginas web complicadas. Te llevamos de la mano a EE.UU., Europa y Asia con un asesor personal 1 a 1 por WhatsApp.
             </p>
 
-            <div className="hero-ctas" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', opacity: 0 }}>
+            <div className="hero-ctas" style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'center', opacity: 0 }}>
               <a href="https://wa.me/51940071218?text=Hola%2C%20quiero%20informaci%C3%B3n%20para%20mi%20primer%20viaje"
                 className="btn btn-wsp" target="_blank" rel="noopener noreferrer" onClick={handleWspClick}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 2C6.477 2 2 6.477 2 12c0 1.785.47 3.457 1.29 4.908L2 22l5.235-1.375A9.953 9.953 0 0012 22c5.516 0 10-4.477 10-10S17.516 2 12 2z" /></svg>
                 Hablar con mi asesor personal
               </a>
-              <a href="#destinos" className="btn btn-outline">Ver destinos</a>
+              <a href="#destinos" style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 4, textDecorationColor: 'rgba(255,255,255,0.35)', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.75)'}>
+                o explora los destinos →
+              </a>
             </div>
 
-            <div className="hero-proof" style={{ marginTop: 48, display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', background: 'rgba(255,255,255,0.07)', borderRadius: 14, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.12)', width: 'fit-content', opacity: 0 }}>
-              <div style={{ display: 'flex' }}>
-                {['#F5A623', '#164DF2', '#25D366', '#E8EBF4'].map((c, i) => (
-                  <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: c, border: '2px solid rgba(10,36,115,0.6)', marginLeft: i ? -8 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>
-                    {['✈', '🌍', '🗽', '⭐'][i]}
-                  </div>
+            <div className="hero-proof" style={{ marginTop: 48, padding: '18px 22px', background: 'rgba(255,255,255,0.07)', borderRadius: 16, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.12)', maxWidth: 520, opacity: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ display: 'flex', gap: 2 }}>
+                  {[0, 1, 2, 3, 4].map(i => (
+                    <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#F5A623"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  ))}
+                </div>
+                <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>Lo que dicen nuestros viajeros</div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                {[1, 2, 3].map(n => (
+                  <a key={n} href={`/KITS/landing/assets/wsp-review-${n}.jpg`} target="_blank" rel="noopener noreferrer"
+                    style={{ display: 'block', borderRadius: 8, overflow: 'hidden', aspectRatio: '9 / 14', background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.10)', transition: 'transform 0.2s, border-color 0.2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = 'rgba(245,166,35,0.6)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.10)'; }}>
+                    <img src={`/KITS/landing/assets/wsp-review-${n}.jpg`} alt={`Reseña real WhatsApp ${n}`}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.target.style.display = 'none'; e.target.parentNode.style.display = 'flex'; e.target.parentNode.style.alignItems = 'center'; e.target.parentNode.style.justifyContent = 'center'; e.target.parentNode.innerHTML = '<div style="color:rgba(255,255,255,0.45);font-size:10px;text-align:center;padding:8px;font-weight:600">Reseña<br/>WhatsApp ' + n + '</div>'; }} />
+                  </a>
                 ))}
               </div>
-              <div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>Cientos de peruanos</div>
-                <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11, fontWeight: 500 }}>ya vivieron su primer viaje con nosotros</div>
+              <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11, fontWeight: 500, marginTop: 10, textAlign: 'center' }}>
+                Capturas reales de clientes que ya viajaron con nosotros
               </div>
             </div>
           </div>

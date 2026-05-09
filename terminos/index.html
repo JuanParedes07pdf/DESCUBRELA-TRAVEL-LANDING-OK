@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Términos y Condiciones — Descúbrela Travel</title>
+  <meta name="description" content="Términos y condiciones del servicio de Descúbrela Travel — HAND TRAVEL SAC.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="canonical" href="https://descubrelatravel.lat/terminos">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #0D0D0D;
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .legal-nav {
+      background: #fff;
+      border-bottom: 1px solid #E8EBF4;
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .legal-nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .legal-nav a.brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #0A2473;
+      font-weight: 800;
+    }
+    .legal-nav a.brand img { height: 38px; width: auto; }
+    .legal-nav a.back {
+      font-size: 13px;
+      font-weight: 700;
+      color: #164DF2;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .legal-nav a.back:hover { color: #0A2473; }
+
+    .legal-hero {
+      background: linear-gradient(155deg, #0A2473 0%, #1A2D87 50%, #164DF2 100%);
+      color: #fff;
+      padding: 64px 24px 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .legal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    .legal-hero-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+    .legal-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #F5A623;
+      margin-bottom: 14px;
+    }
+    .legal-hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .legal-hero p {
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+    }
+    .legal-meta {
+      margin-top: 18px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.04em;
+    }
+
+    .legal-main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+    .legal-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .btn-legal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-legal-primary { background: #164DF2; color: #fff; }
+    .btn-legal-primary:hover { background: #0A2473; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22, 77, 242, 0.3); }
+    .btn-legal-ghost { background: #fff; color: #0A2473; border: 1.5px solid #E8EBF4; }
+    .btn-legal-ghost:hover { border-color: #164DF2; color: #164DF2; }
+
+    .pdf-frame {
+      width: 100%;
+      height: 80vh;
+      min-height: 600px;
+      border: 1px solid #E8EBF4;
+      border-radius: 14px;
+      background: #F5F7FB;
+      box-shadow: 0 12px 40px rgba(10, 36, 115, 0.08);
+    }
+    .pdf-fallback {
+      display: none;
+      padding: 48px 24px;
+      text-align: center;
+      border: 1px dashed #C7CEDC;
+      border-radius: 14px;
+      background: #F5F7FB;
+      color: #5A6275;
+    }
+    .pdf-fallback strong { color: #0A2473; display: block; margin-bottom: 8px; font-size: 16px; }
+
+    .legal-footer {
+      background: #0A2473;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .legal-footer a { color: #F5A623; text-decoration: none; }
+    .legal-footer a:hover { text-decoration: underline; }
+    .legal-footer-links {
+      margin-bottom: 14px;
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .legal-footer-links a { color: rgba(255, 255, 255, 0.75); font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .pdf-frame { height: 70vh; min-height: 480px; }
+      .legal-hero { padding: 48px 20px 44px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="legal-nav">
+    <div class="legal-nav-inner">
+      <a class="brand" href="/">
+        <img src="../KITS/landing/assets/ISOLOGO.png" alt="Descúbrela Travel">
+        <span>Descúbrela Travel</span>
+      </a>
+      <a class="back" href="/">← Volver al inicio</a>
+    </div>
+  </nav>
+
+  <header class="legal-hero">
+    <div class="legal-hero-inner">
+      <div class="legal-eyebrow">Información Legal</div>
+      <h1>Términos y Condiciones</h1>
+      <p>Lee con calma las condiciones que rigen la contratación de nuestros servicios de viaje. Si tienes dudas, escríbenos por WhatsApp y te las explicamos.</p>
+      <div class="legal-meta">HAND TRAVEL SAC · CC Comercial 21 de Julio, Int 544 - Pasaje 2, Lima</div>
+    </div>
+  </header>
+
+  <main class="legal-main">
+    <div class="legal-actions">
+      <a class="btn-legal btn-legal-primary" href="../legal-pdfs/terminos-y-condiciones.pdf" download>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar PDF
+      </a>
+      <a class="btn-legal btn-legal-ghost" href="../legal-pdfs/terminos-y-condiciones.pdf" target="_blank" rel="noopener">
+        Abrir en pestaña nueva
+      </a>
+    </div>
+
+    <object class="pdf-frame" data="../legal-pdfs/terminos-y-condiciones.pdf" type="application/pdf">
+      <div class="pdf-fallback" style="display:block">
+        <strong>Tu navegador no puede mostrar el PDF en línea.</strong>
+        Descárgalo con el botón de arriba para verlo.
+      </div>
+    </object>
+  </main>
+
+  <footer class="legal-footer">
+    <div class="legal-footer-links">
+      <a href="/terminos">Términos y Condiciones</a>
+      <a href="/politicas-reembolso">Políticas de Reembolso</a>
+      <a href="/privacidad">Política de Privacidad</a>
+    </div>
+    <div>© 2025 Descúbrela Travel · HAND TRAVEL SAC · Contacto: <a href="https://wa.me/51940071218" target="_blank" rel="noopener">+51 940 071 218</a></div>
+  </footer>
+
+</body>
+
+</html>
